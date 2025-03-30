@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 import uuid
+from sqlalchemy import func
 
 Base = declarative_base()
 

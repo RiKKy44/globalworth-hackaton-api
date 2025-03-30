@@ -1,14 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.building import (
     BuildingCreate,
     BuildingResponse,
     BuildingCRUD,
-    get_building_or_404
+    get_building_or_404,
+    DBBuilding
 )
+import datetime
 from core.database import get_db
 from core.security import get_current_user
 
+class BuildingResponse(BuildingBase):
+    id: str
+    created_at: datetime
+    updated_at: Optional[datetime]
+
+    class Config:
+        orm_mode = True
 router = APIRouter(prefix="/buildings", tags=["Buildings"])
 
 @router.post("/", response_model=BuildingResponse)
@@ -32,7 +42,7 @@ async def read_building(
     """Get building by ID"""
     return building
 
-@router.get("/", response_model=List[BuildingResponse])
+@router.get("/", response_model=List[BuildingResponse])  # Use List[] for type hinting
 async def list_buildings(
     skip: int = 0,
     limit: int = 100,
