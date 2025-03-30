@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Optional
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.building import (
@@ -8,9 +8,31 @@ from ..models.building import (
     get_building_or_404,
     DBBuilding
 )
-import datetime
 from core.database import get_db
 from core.security import get_current_user
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, DateTime, JSON
+import datetime
+from pydantic import BaseModel
+Base = declarative_base()
+
+# Database Model
+class DBBuilding(Base):
+    __tablename__ = "buildings"
+    id = Column(String(36), primary_key=True, index=True)
+    name = Column(String(100), nullable=False)
+    address = Column(String(200))
+    certifications = Column(JSON, default=[])
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.utcnow)
+
+# Pydantic Models
+class BuildingBase(BaseModel):
+    name: str
+    address: Optional[str] = None
+
+class BuildingCreate(BuildingBase):
+    pass
 
 class BuildingResponse(BuildingBase):
     id: str

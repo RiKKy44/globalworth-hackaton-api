@@ -1,1 +1,1 @@
-pip install fastapi uvicorn sqlalchemy pydantic python-jose passlib bacpypes3 asyncio-mqtt
+pip install fastapi uvicorn sqlalchemy pydantic python-jose passlib bacpypes3 asyncio-mqtt pydantic_settings
